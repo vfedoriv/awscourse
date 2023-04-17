@@ -1,0 +1,41 @@
+{
+  "Description": "Test EC2 instance",
+  "Parameters": {
+    "KeyPairName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access",
+      "Type": "AWS::EC2::KeyPair::KeyName"
+    },
+    "ImageAMI": {
+      "Type": "String",
+      "Default": "ami-069aabeee6f53e7bf"
+    },
+    "InstType": {
+      "Type": "String",
+      "Default": "t2.micro"
+    }
+  },
+  "Resources": {
+    "EC2Instance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "ImageAMI"
+        },
+        "InstanceType": {
+          "Ref": "InstType"
+        },
+        "KeyName": {
+          "Ref": "KeyPairName"
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "InstanceIP": {
+      "Description": "Instance public IP",
+      "Value": {
+        "Fn::GetAtt": [ "EC2Instance", "PublicIp" ]
+      }
+    }
+  }
+}
