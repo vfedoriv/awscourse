@@ -7,7 +7,7 @@
     },
     "ImageAMI": {
       "Type": "String",
-      "Default": "ami-069aabeee6f53e7bf"
+      "Default": "ami-02d5619017b3e5162"
     },
     "InstType": {
       "Type": "String",
