@@ -1,0 +1,111 @@
+{
+  "AWSTemplateFormatVersion":"2010-09-09",
+  "Parameters":{
+    "KeyPairName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "Default": "vf_cap1"
+    },
+    "ImageAMI": {
+      "Type": "String",
+      "Default": "ami-02d5619017b3e5162"
+    },
+    "InstanceType": {
+      "Type": "String",
+      "Default": "t2.micro"
+    },
+    "Subnets":{
+      "Type":"List<AWS::EC2::Subnet::Id>",
+      "Description":"At least two public subnets in different Availability Zones in the selected VPC",
+      "Default": "subnet-0523c91c740293148"
+    },
+    "VPC":{
+      "Type":"AWS::EC2::VPC::Id",
+      "Description":"A virtual private cloud (VPC) that enables resources in public subnets to connect to the internet",
+      "Default": "vpc-0135dec714579ea77"
+    }
+  },
+  "Resources":{
+    "EC2SecurityGroup":{
+      "Type":"AWS::EC2::SecurityGroup",
+      "Properties":{
+        "GroupDescription":"EC2 Security Group",
+        "VpcId":{
+          "Ref":"VPC"
+        },
+        "SecurityGroupIngress":[
+          {
+            "IpProtocol":"tcp",
+            "FromPort":80,
+            "ToPort":80,
+            "CidrIp":"0.0.0.0/0"
+          },
+          {
+            "IpProtocol":"tcp",
+            "FromPort":22,
+            "ToPort":22,
+            "CidrIp":"0.0.0.0/0"
+          }
+        ]
+      }
+    },
+    "LaunchTemplate":{
+      "Type":"AWS::EC2::LaunchTemplate",
+      "Properties":{
+        "LaunchTemplateName":{
+          "Fn::Sub":"${AWS::StackName}-launch-template"
+        },
+        "LaunchTemplateData":{
+          "ImageId":{
+            "Ref":"ImageAMI"
+          },
+          "InstanceType":{
+            "Ref":"InstanceType"
+          },
+          "KeyName":{
+            "Ref":"KeyPairName"
+          },
+          "SecurityGroupIds":[
+            {
+              "Ref":"EC2SecurityGroup"
+            }
+          ],
+          "UserData":{
+            "Fn::Base64":{
+              "Fn::Join":[
+                "",
+                [
+                  "#!/bin/bash\n",
+                  "sudo yum update -y\n",
+                  "sudo yum install -y java-1.8.0-openjdk\n"
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "asgGroup":{
+      "Type":"AWS::AutoScaling::AutoScalingGroup",
+      "Properties":{
+        "LaunchTemplate":{
+          "LaunchTemplateId":{
+            "Ref":"LaunchTemplate"
+          },
+          "Version":{
+            "Fn::GetAtt":[
+              "LaunchTemplate",
+              "LatestVersionNumber"
+            ]
+          }
+        },
+        "MaxSize":"2",
+        "MinSize":"2",
+        "DesiredCapacity": "2",
+        "VPCZoneIdentifier":{
+          "Ref":"Subnets"
+        }
+      }
+    }
+  }
+}

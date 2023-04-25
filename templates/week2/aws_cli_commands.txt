@@ -1,0 +1,1 @@
+aws cloudformation create-stack --stack-name stack-2 --template-body file:////Users/vfedoriv/workspace/awscourse/templates/week2/asg_template_stack.json --profile capgemini
