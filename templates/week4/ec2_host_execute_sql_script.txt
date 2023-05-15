@@ -1,0 +1,5 @@
+ssh -i vf_cap1.pem ec2-user@52.32.94.154
+
+psql --host=vf-postgres-db-1.cwko7wjv2t9i.us-west-2.rds.amazonaws.com --port=5432 --username=postgres --password -f ./rds-script.sql
+
+# password: postgres

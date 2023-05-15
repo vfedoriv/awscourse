@@ -1,0 +1,15 @@
+CREATE DATABASE petclinic
+    WITH OWNER = postgres
+    ENCODING = 'UTF8'
+    CONNECTION LIMIT = -1;
+
+CREATE TABLE IF NOT EXISTS vets (id SERIAL, first_name VARCHAR(30), last_name VARCHAR(30));
+
+INSERT INTO vets VALUES (1, 'James', 'Carter') ON CONFLICT DO NOTHING;
+INSERT INTO vets VALUES (2, 'Helen', 'Leary') ON CONFLICT DO NOTHING;
+INSERT INTO vets VALUES (3, 'Linda', 'Douglas') ON CONFLICT DO NOTHING;
+INSERT INTO vets VALUES (4, 'Rafael', 'Ortega') ON CONFLICT DO NOTHING;
+INSERT INTO vets VALUES (5, 'Henry', 'Stevens') ON CONFLICT DO NOTHING;
+INSERT INTO vets VALUES (6, 'Sharon', 'Jenkins') ON CONFLICT DO NOTHING;
+
+SELECT * from vets;
