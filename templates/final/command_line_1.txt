@@ -1,0 +1,25 @@
+export TF_VAR_aws_access_key_id=""
+export TF_VAR_aws_secret_access_key=""
+
+ssh -i vf_cap1.pem ec2-user@35.91.237.200
+
+ssh -i vf_cap1.pem ec2-user@10.0.3.8
+
+psql --host=vf-postgres-db-1.cwko7wjv2t9i.us-west-2.rds.amazonaws.com --port=5432 --dbname=EduLohikaTrainingAwsRds --username=rootuser --password
+
+psql> \c EduLohikaTrainingAwsRds
+EduLohikaTrainingAwsRds>  \dt public.*
+EduLohikaTrainingAwsRds> SELECT * FROM "public".logs;
+
+
+java -cp calc-client-1.0-SNAPSHOT-jar-with-dependencies.jar CalcClient vf2-load-balancer-1123651944.us-west-2.elb.amazonaws.com
+
+
+
+
+
+
+
+
+
+java -cp calc-client-1.0-SNAPSHOT-jar-with-dependencies.jar CalcClient vf2-load-balancer-976193808.us-west-2.elb.amazonaws.com

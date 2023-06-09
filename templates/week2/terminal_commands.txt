@@ -1,1 +1,1 @@
- ssh -i vf_cap1.pem ec2-user@54.214.42.212
+ssh -i vf_cap1.pem ec2-user@54.214.42.212
